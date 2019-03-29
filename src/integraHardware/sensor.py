@@ -2,7 +2,7 @@
 #  @brief Contains abstract class definition for sensor interfacing
 
 #  This will be used throughout sensors
-
+import asyncio
 
 ## @brief Abstract class used
 #  for sensor interfacing
@@ -11,25 +11,29 @@
 #  be implemented by all of the sensors
 class AbstractSensor:
         
+    def __init__(self):
+        self.measurementSem = asyncio.Semaphore()
+
     @property
     ## This contains the product code of 
     #  currently used sensor
     def sensorID(self):
         pass
 
-    @property
-    ## Get I2C sensor address
-    def sensorAddrI2C(self):
-        pass
-
+    measurements = None
+    measurementSem = None
     ## @brief Measure the value determined by string
     #  `type`
     #
     #  @param type Sensor-specific string determining 
     #  the measurement type for the sensor
     def getMeasurementValue(self, type):
-        pass
-    
+        res = -1
+        self.measurementSem.acquire()
+        res = self.measurements[type]
+        self.measurementSem.release()
+        return res
+
     ## List all possible measurement types
     #
     #  Returns a list of string containing measurement
@@ -50,6 +54,14 @@ class AbstractSensor:
     def poll(self):
         pass
 
+    ## Perform a thread-safe refresh of the 
+    #  measurements 
+    def refresh(self):
+        self.measurementSem.acquire()
+        self.poll()
+        self.measurementSem.release()
+        
+    
     ## Returns the sensor description in human
     #  readable form. This can be used for debug and 
     #  for presenting to the user

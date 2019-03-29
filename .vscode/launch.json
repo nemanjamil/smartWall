@@ -17,14 +17,14 @@
             "request": "attach",
             "port": 5678,
             "host": "192.168.0.24",
-            "preLaunchTask": "rpi_py_debug",
+            //"preLaunchTask": "rpi_py_debug",
             "pathMappings": [
                 {
                     "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "./integra/"
+                    "remoteRoot": "./"
                 }
-            ],
-            "postDebugTask": "rpi_py_kill"
+            ]
+            //"postDebugTask": "rpi_py_kill"
         },
         {
             "name": "Python: Module",
