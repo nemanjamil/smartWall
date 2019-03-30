@@ -1,4 +1,4 @@
-from sensor import AbstractSensor
+from .AbstractSensor import AbstractSensor
 from smbus2 import SMBusWrapper, i2c_msg
 import time
 import struct
@@ -51,17 +51,14 @@ V_F_Cal_v = 0x34
 
 V_F_Cal_DUV = 0x38
 V_F_Cal_LUX = 0x3C
-V_F_Cal_CCT = 0x41
+V_F_Cal_CCT = 0x40
 
 
 class SpectralSensor(AbstractSensor):
     i2cAddr = 0x49
 
 
-    measurements = {
-        "Color temperature" : [-1,"K"],
-        "DUV" : [-1, ""] 
-    }
+    
     def bytesToFloat(self, byteList):
         return struct.unpack(">f", bytes(byteList))[0]
 
@@ -73,6 +70,8 @@ class SpectralSensor(AbstractSensor):
             while(bus.read_byte_data(self.i2cAddr, STATUS) & 0x02):
                 time.sleep(0.01)
             bus.write_byte_data(self.i2cAddr, WRITE, value)
+
+    
     def readVirtualReg(self, register):
         with SMBusWrapper(1) as bus:
             while bus.read_byte_data(self.i2cAddr, STATUS) & 0x02:
@@ -82,33 +81,49 @@ class SpectralSensor(AbstractSensor):
                 time.sleep(0.01)
             return bus.read_byte_data(self.i2cAddr, READ)
 
+
     def readFloatReg(self, registerOffset):
         res = []
         for i in range(4):
             res += [self.readVirtualReg(registerOffset + i)]
         return self.bytesToFloat(res)
+
+    
     def sensorID(self):
         return "AS7261"
-    def getMeasurementValue(self, type):
-        return self.measurements[type]
 
-    def getMeasurementTypes(self):
-        return list(self.measurements.keys)
-    def getMeasurementUnit(self, type):
-        return self.measurements[type][1]
-    def __init__(self):
-        print(self.readVirtualReg(V_F_Cal_LUX))
+
+
+    def __init__(self):    
+        AbstractSensor.__init__(self)
+        self.measurements = {
+            "Color temperature" : [-1,"K"],
+            "DUV" : [-1, ""] 
+        }
         self.writeVirtualReg(V_LED_Control, 0x00)
         oldControl = self.readVirtualReg(V_Control_Setup)
-        self.writeVirtualReg(V_Control_Setup, oldControl | 0x00)
+        newControl = oldControl & ~0x30
+        newControl = oldControl | 0x20
+        
+        self.writeVirtualReg(V_Control_Setup, newControl)
+
     def poll(self):
-        oldControl = self.readVirtualReg(V_Control_Setup)
-        self.writeVirtualReg(V_Control_Setup, oldControl | 0x0C)
-        while (~(self.readVirtualReg(V_Control_Setup)) & 0x02):
-            time.sleep(0.05)
-        x = self.readFloatReg(V_F_Cal_x_1931)
-        y = self.readFloatReg(V_F_Cal_y_1931)
-        n = (x - 0.3320) / (0.1858 - y)
-        cct = 437*n**3 + 3601 * n ** 2 + 6861 * n + 5517
-        self.measurements["Color temperature"][0] = cct
-        self.measurements["DUV"][0] = self.readFloatReg(V_F_Cal_DUV)
+        try:
+            oldControl = self.readVirtualReg(V_Control_Setup)
+            self.writeVirtualReg(V_Control_Setup, oldControl | 0x0C)
+            while (~(self.readVirtualReg(V_Control_Setup)) & 0x02):
+                time.sleep(0.05)
+            
+            x = self.readFloatReg(V_F_Cal_x_1931)
+            y = self.readFloatReg(V_F_Cal_y_1931)
+            
+            if((x > 1.0) | (x < 0.0) | (y > 1.0) | (y < 0.0)):
+                return
+            
+            n = (x - 0.3320) / (0.1858 - y)
+            cct = 437*n**3 + 3601 * n ** 2 + 6861 * n + 5517
+            self.measurements["Color temperature"][0] = cct
+            self.measurements["DUV"][0] = self.readFloatReg(V_F_Cal_DUV)
+        except:
+            print("An error occured")
+

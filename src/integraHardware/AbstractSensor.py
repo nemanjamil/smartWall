@@ -2,7 +2,7 @@
 #  @brief Contains abstract class definition for sensor interfacing
 
 #  This will be used throughout sensors
-import asyncio
+import threading
 
 ## @brief Abstract class used
 #  for sensor interfacing
@@ -12,16 +12,15 @@ import asyncio
 class AbstractSensor:
         
     def __init__(self):
-        self.measurementSem = asyncio.Semaphore()
-
+        self.measurementSem = threading.Lock()
+        self.measurements = None
+    
     @property
     ## This contains the product code of 
     #  currently used sensor
     def sensorID(self):
         pass
 
-    measurements = None
-    measurementSem = None
     ## @brief Measure the value determined by string
     #  `type`
     #
@@ -30,7 +29,11 @@ class AbstractSensor:
     def getMeasurementValue(self, type):
         res = -1
         self.measurementSem.acquire()
-        res = self.measurements[type]
+        try:
+            res = self.measurements[type]
+            res = res[0]
+        except:
+            print("Measurement not available")
         self.measurementSem.release()
         return res
 
@@ -39,7 +42,7 @@ class AbstractSensor:
     #  Returns a list of string containing measurement
     #  types
     def getMeasurementTypes(self):
-        pass
+        return list(self.measurements.keys())
     
     ## Get the unit of measure for the given
     #  measurement type
@@ -47,7 +50,7 @@ class AbstractSensor:
     #  @param type Sensor-specific string determining
     #  the measurement type for the sensor
     def getMeasurementUnit(self, type):
-        pass
+        return self.measurements[type][1]
     
     ## Pull register values from the sensor
     #  and store them locally
@@ -58,7 +61,10 @@ class AbstractSensor:
     #  measurements 
     def refresh(self):
         self.measurementSem.acquire()
-        self.poll()
+        try:
+            self.poll()
+        except:
+            print("An error during poll occured")
         self.measurementSem.release()
         
     

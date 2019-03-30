@@ -17,6 +17,7 @@
             "request": "attach",
             "port": 5678,
             "host": "192.168.0.24",
+            "redirectOutput": true,
             //"preLaunchTask": "rpi_py_debug",
             "pathMappings": [
                 {

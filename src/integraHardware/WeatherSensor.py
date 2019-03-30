@@ -1,25 +1,22 @@
-from sensor import AbstractSensor
+from .AbstractSensor import AbstractSensor
 import bme280
 from smbus2 import SMBusWrapper
 import time
 class WeatherSensor(AbstractSensor):
     i2cAddr = 0x76
-    measurements = {
-        "temperature" : [-1,"&#x2103"],
-        "pressure" : [-1,"mbar"],
-        "humidity" : [-1,"%"]
-    }
+
     calib_params = None
     def sensorID(self):
         return "BME280"
-    def getMeasurementValue(self, type):
-        return self.measurements[type]
 
-    def getMeasurementTypes(self):
-        return list(self.measurements.keys)
-    def getMeasurementUnit(self, type):
-        return self.measurements[type][1]
+
     def __init__(self):
+        AbstractSensor.__init__(self)
+        self.measurements = {
+            "temperature" : [-1,"&#x2103"],
+            "pressure" : [-1,"mbar"],
+            "humidity" : [-1,"%"]
+        }
         with SMBusWrapper(1) as bus:
             self.calib_params = bme280.load_calibration_params(bus, self.i2cAddr)
         

@@ -1,4 +1,4 @@
-from sensor import AbstractSensor
+from .AbstractSensor import AbstractSensor
 from smbus2 import SMBusWrapper, i2c_msg
 import time
 STATUS = 0X00
@@ -18,13 +18,6 @@ SW_RESET = 0XFF
 class CO2Tvoc(AbstractSensor):
     i2cAddr = 0x5A
 
-
-    measurements = {
-        "TVOC" : [-1,"ppb"],
-        "CO2" : [-1,"ppm"]
-    }
-    CCS811_sens = None
-
     def readSensorReg(self, regAddr, numBits):
         result = []
         with SMBusWrapper(1) as bus:
@@ -41,32 +34,32 @@ class CO2Tvoc(AbstractSensor):
 
     def sensorID(self):
         return "CCS811"
-    def getMeasurementValue(self, type):
-        return self.measurements[type]
 
-    def getMeasurementTypes(self):
-        return list(self.measurements.keys)
-    def getMeasurementUnit(self, type):
-        return self.measurements[type][1]
+
     def __init__(self):
+        AbstractSensor.__init__(self)
         self.reset()
         self.writeSensorReg(0x01, [0x10])
+
+        self.measurements = {
+            "TVOC" : [-1,"ppb"],
+            "CO2" : [-1,"ppm"]
+        }
         if(self.readSensorReg(STATUS,1)[0] & 0x01):
             print("Sensor returned bad status")
 
     def poll(self):
         try:
             status = self.readSensorReg(STATUS,1)[0]
-            print(status)
             if ((status & 0x08)):
                 vals = self.readSensorReg(ALG_RESULT_DATA,5)
                 if(status & 0x01):
                     print("Error: {:02x}".format(self.readSensorReg(ERROR_ID,1)[0]))
                 else:
-                    self.measurements["CO2"] = int.from_bytes(vals[0:2], 'big', signed=False) & 0x7FFF
-                    self.measurements["TVOC"] = int.from_bytes(vals[2:4], 'big', signed=False) & 0x7FFF
+                    self.measurements["CO2"][0] = int.from_bytes(vals[0:2], 'big', signed=False) & 0x7FFF
+                    self.measurements["TVOC"][0] = int.from_bytes(vals[2:4], 'big', signed=False) & 0x7FFF
         except:
             print("Error occured")
-    def setTempHum(self, temperature, humidity):
-        self.CCS811_sens.setEnvironmentalData(humidity, temperature)
 
+
+    
