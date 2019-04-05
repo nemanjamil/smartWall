@@ -1,8 +1,12 @@
+## @file integraHWManager.py
+#  @brief High-level interface to sensors implemented
+#  in integraHardware
+
 import time
 import csv
-import datetime
+from datetime import datetime
 from threading import Timer
-
+import os
 from integraHardware.WeatherSensor import WeatherSensor
 from integraHardware.CO2Tvoc import CO2Tvoc
 from integraHardware.MotionSensor import MotionSensor
@@ -11,47 +15,86 @@ from integraHardware.SpectralSensor import SpectralSensor
 class IntegraHWManager:
 
     def __init__(self, autoRefresh=False, autoRefreshPeriod=1, log=False, logFilename="", logPeriod=1):
+        
+        # Initialize the sensors and prepare the data structures holding them
         self.sensors = [WeatherSensor(), CO2Tvoc(), SpectralSensor(), MotionSensor()]
         self.measurementSources = dict()
         self.measurementTypes = []
+
+        # Initialize connections with sensors
         for sensor in self.sensors:
             measurementTypes = sensor.getMeasurementTypes()
             for measurementType in measurementTypes:
                 self.measurementSources[measurementType] = sensor
                 self.measurementTypes.append(measurementType)
+        
+        # If refreshing is performed automatically (preferred)
+        # initialize the refresh routines and start
         self.autoRefresh = autoRefresh
         if (self.autoRefresh):
             self.interval = autoRefreshPeriod
             self.refresh()
         self.log = log
+
+        # If logging is enabled, build log file 
+        # and start logging
         if(self.log):
-            self.logFile = logFilename
+            self.logFile = datetime.now().strftime("_%d_%m_%Y__%H_%M_%S_") + logFilename
             self.logPeriod = logPeriod
+            with open(self.logFile,"w") as fileHandle:
+                writer = csv.writer(fileHandle)
+                writer.writerow(self.measurementTypes)
             self.doLog()
+    
+    ## @brief Do a refresh of all sensors
     def refresh(self):
+        # Go through all of the sensors and perform
+        # a refresh
         for sensor in self.sensors:
             sensor.refresh()
+        
+        # Init next thread if auto refresh enabled
         if(self.autoRefresh):
             self.t = Timer(self.interval, self.refresh)
             self.t.daemon = True
             self.t.start()
+        
+    ## @brief Acquire the measurement value
+    # using the joined measurement types
     def getMeasurementValue(self, meastype):
         sensor = self.measurementSources[meastype]
         return sensor.getMeasurementValue(meastype)
+    
+    # Get the list of available measurement types
     def getMeasurementTypes(self):
         return self.measurementTypes
+    
+    # Get the string value of the measurement unit
     def getMeasurementUnit(self, meastype):
         return self.measurementSources[meastype].getMeasurementUnit(meastype)
+
+    # Acquire a list of all measurement values
+    # in order determined by getMeasurementTypes()
     def getAllMeasurementVals(self):
         measurementVals = []
         for measurement in self.getMeasurementTypes():
             measurementVals.append(self.getMeasurementValue(measurement))
         return measurementVals
+
+    def getAllDicts(self):
+        types = self.getMeasurementTypes()
+        res = dict()
+        for type in types:
+            typeRes = dict()
+            typeRes["unit"] = self.getMeasurementUnit(type)
+            typeRes["value"] = self.getMeasurementValue(type)
+            res[type] = typeRes
+        return res
+    # Perform a logging operation
     def doLog(self):
-        print("Logging")
         with open(self.logFile, "a") as outFile:
             writer = csv.writer(outFile)
-            towrite = [datetime.datetime.now(), self.getAllMeasurementVals()]
+            towrite = self.getAllMeasurementVals()
             writer.writerow(towrite)
         if(self.log):
             self.logt = Timer(self.logPeriod, self.doLog)
@@ -59,7 +102,7 @@ class IntegraHWManager:
             self.logt.start()
 
 if __name__ == "__main__":
-    hwmgr = IntegraHWManager(autoRefresh=True, autoRefreshPeriod=1.0, log=True, logPeriod=5.0, logFilename="Measurements log")
+    hwmgr = IntegraHWManager(autoRefresh=True, autoRefreshPeriod=1.0, log=True, logPeriod=5.0, logFilename="log.txt")
 
     while True:
         print(hwmgr.getMeasurementValue("Motion"))

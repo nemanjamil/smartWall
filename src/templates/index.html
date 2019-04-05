@@ -6,15 +6,19 @@
     <title>Integra Wall</title>
     <link rel="stylesheet" type="text/css" media="screen" 
         href="{{ url_for('static', filename='stylesheet.css') }}">
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script type=text/javascript 
+        src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script type=text/javascript 
+        src="{{ url_for('static', filename='scripts.js') }}"></script>
+    
 </head>
 <body>
     <div id="mainDiv" class="centered">
         <div id="measurementName" class="centered">
-            TMP
+            ----
         </div>
         <div id="measurementValue" class="centered"> 
-            VAL
+            --- --
         </div>
     </div>
 </body>

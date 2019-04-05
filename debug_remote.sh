@@ -10,6 +10,10 @@ sshpass -p ${rpiPass} ssh pi@${rpiIP} "mkdir ${integraRoot}/src"
 
 sshpass -p ${rpiPass} scp -r ./src/* pi@${rpiIP}:${integraRoot}/src
 echo "Got here"
-sshpass -p ${rpiPass} ssh pi@${rpiIP} "cd ${integraRoot} && \
-source ${integraRoot}/main_venv/bin/activate && \
-nohup python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait ${integraRoot}/${1} &"
+export remoteRun="False"
+if [ ${remoteRun} = "True" ] 
+    then
+    sshpass -p ${rpiPass} ssh pi@${rpiIP} "cd ${integraRoot} && \
+    source ${integraRoot}/main_venv/bin/activate && \
+    nohup python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait ${integraRoot}/${1} &"
+fi

@@ -13,7 +13,7 @@ class WeatherSensor(AbstractSensor):
     def __init__(self):
         AbstractSensor.__init__(self)
         self.measurements = {
-            "temperature" : [-1,"&#x2103"],
+            "temperature" : [-1,"&#8451;"],
             "pressure" : [-1,"mbar"],
             "humidity" : [-1,"%"]
         }
