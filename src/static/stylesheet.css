@@ -1,5 +1,5 @@
 body{
-    background-color: black;
+    background-color: rgb(2, 0, 25);
     text-align: center;
     margin: auto;
 }
@@ -17,7 +17,7 @@ body{
     color: antiquewhite;
     font-size: 30pt;
     margin: auto;
-
+    font-family: sans-serif;
 }
 #measurementValue{
 
@@ -25,5 +25,5 @@ body{
     color: beige;
     font-size: 60pt ;
     text-size-adjust: auto;
-    
+    font-family: sans-serif;
 }

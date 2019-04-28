@@ -50,8 +50,8 @@ V_F_Cal_u = 0x30
 V_F_Cal_v = 0x34
 
 V_F_Cal_DUV = 0x38
-V_F_Cal_LUX = 0x3C
-V_F_Cal_CCT = 0x40
+V_Cal_LUX = 0x3C
+V_Cal_CCT = 0x40
 
 
 class SpectralSensor(AbstractSensor):
@@ -88,6 +88,12 @@ class SpectralSensor(AbstractSensor):
             res += [self.readVirtualReg(registerOffset + i)]
         return self.bytesToFloat(res)
 
+    def read4byteReg(self, registerOffset):
+        res = []
+        for i in range(4):
+            res += [self.readVirtualReg(registerOffset + i)]
+        return struct.unpack(">L", bytes(res))[0]
+        
     
     def sensorID(self):
         return "AS7261"
@@ -98,12 +104,13 @@ class SpectralSensor(AbstractSensor):
         AbstractSensor.__init__(self)
         self.measurements = {
             "Color temperature" : [-1,"K"],
-            "DUV" : [-1, ""] 
+            "DUV" : [-1, ""],
+            "LUX" : [-1, "lx"] 
         }
         self.writeVirtualReg(V_LED_Control, 0x00)
         oldControl = self.readVirtualReg(V_Control_Setup)
         newControl = oldControl & ~0x30
-        newControl = oldControl | 0x20
+        newControl = oldControl | 0x30
         
         self.writeVirtualReg(V_Control_Setup, newControl)
 
@@ -116,7 +123,8 @@ class SpectralSensor(AbstractSensor):
             
             x = self.readFloatReg(V_F_Cal_x_1931)
             y = self.readFloatReg(V_F_Cal_y_1931)
-            
+            lux = float(self.read4byteReg(V_Cal_LUX))/50000.0
+
             if((x > 1.0) | (x < 0.0) | (y > 1.0) | (y < 0.0)):
                 return
             
@@ -124,6 +132,7 @@ class SpectralSensor(AbstractSensor):
             cct = 437*n**3 + 3601 * n ** 2 + 6861 * n + 5517
             self.measurements["Color temperature"][0] = cct
             self.measurements["DUV"][0] = self.readFloatReg(V_F_Cal_DUV)
+            self.measurements["LUX"][0] = lux
         except:
             print("An error occured")
 

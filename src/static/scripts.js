@@ -1,5 +1,6 @@
-var wantedMeasurements = ["temperature", "humidity", "pressure", "Color temperature", "CO2", "TVOC"];
-var nameMappings = ['Temperature', "Humidity", "Pressure", "Light temperature", "CO<sub>2</sub>", "Volatile compounds"];
+var wantedMeasurements = ["temperature", "humidity", "pressure", "Color temperature", "CO2", "O2", "TVOC"];
+var nameMappings = ['Temperature', "Humidity", "Pressure", "Light temperature", "CO<sub>2</sub>","O<sub>2</sub>", "Volatile compounds"];
+var significantDigits = [2,2,3,2,2,3,2]
 var updateInterval = null;
 var updateDisplayInterval = null;
 var changeDisplayMeasurementInterval = null;
@@ -10,8 +11,8 @@ var refreshTime_ms = 1000;
 var changeTime_ms = 10000;
 // Rounds a measured value to two significant digits
 // It looks ugly otherwise
-function getRoundedValue(number){
-    return parseFloat(number.toPrecision(2));
+function getRoundedValue(number, precision=2){
+    return parseFloat(number.toPrecision(precision));
 }
 
 // Get the JSON data using jquery
@@ -24,8 +25,10 @@ function updateDisplay(){
     if(values){
         var currentMeasurementID = wantedMeasurements[currentIdx];
         var currentMeasurementName = nameMappings[currentIdx];
+        var currentSignificantDigits = significantDigits[currentIdx];
         var currentMeasurement = values[currentMeasurementID];
-        var displayValue = getRoundedValue(currentMeasurement.value);
+
+        var displayValue = getRoundedValue(currentMeasurement.value, currentSignificantDigits);
         var displayUnit = currentMeasurement.unit;    
         $("#measurementName").html(currentMeasurementName);
         $("#measurementValue").html(String(displayValue) + " " + displayUnit);

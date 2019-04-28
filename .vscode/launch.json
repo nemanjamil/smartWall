@@ -24,7 +24,8 @@
                     "localRoot": "${workspaceFolder}",
                     "remoteRoot": "./"
                 }
-            ]
+            ],
+                    
             //"postDebugTask": "rpi_py_kill"
         },
         {

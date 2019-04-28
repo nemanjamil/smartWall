@@ -63,11 +63,11 @@ class AbstractSensor:
         self.measurementSem.acquire()
         try:
             self.poll()
-        except:
-            print("An error during poll occured")
+        except Exception as e:
+            print("An error during poll occured", str(e))
         self.measurementSem.release()
         
-    
+
     ## Returns the sensor description in human
     #  readable form. This can be used for debug and 
     #  for presenting to the user

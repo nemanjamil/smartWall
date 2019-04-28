@@ -4,10 +4,10 @@ from integraHWManager import IntegraHWManager
 app = Flask(__name__)
 
 mgr = IntegraHWManager(autoRefresh=True, 
-autoRefreshPeriod=1.0, 
-log=True,
-logPeriod=20.0, 
-logFilename="log.txt")
+                       autoRefreshPeriod=0.5, 
+                       log=True,
+                       logPeriod=20.0, 
+                       logFilename="log.txt")
 
 @app.route("/")
 def index():

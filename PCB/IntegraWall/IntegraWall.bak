@@ -1,0 +1,71 @@
+EESchema Schematic File Version 4
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Connector:Raspberry_Pi_2_3 J1
+U 1 1 5CC58F9C
+P 2600 5650
+F 0 "J1" H 2600 7128 50  0000 C CNN
+F 1 "Raspberry_Pi_2_3" H 2600 7037 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical" H 2600 5650 50  0001 C CNN
+F 3 "https://www.raspberrypi.org/documentation/hardware/raspberrypi/schematics/rpi_SCH_3bplus_1p0_reduced.pdf" H 2600 5650 50  0001 C CNN
+	1    2600 5650
+	1    0    0    -1  
+$EndComp
+$Comp
+L ClickBoards:MikroBus Weather_click
+U 1 1 5CC59422
+P 4400 2900
+F 0 "Weather_click" H 4400 3565 50  0000 C CNN
+F 1 "MikroBus" H 4400 3474 50  0000 C CNN
+F 2 "" H 4400 3400 50  0001 C CNN
+F 3 "" H 4400 3400 50  0001 C CNN
+	1    4400 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L ClickBoards:MikroBus Air_quality_3_click
+U 1 1 5CC59592
+P 5600 2900
+F 0 "Air_quality_3_click" H 5600 3565 50  0000 C CNN
+F 1 "MikroBus" H 5600 3474 50  0000 C CNN
+F 2 "" H 5600 3400 50  0001 C CNN
+F 3 "" H 5600 3400 50  0001 C CNN
+	1    5600 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L ClickBoards:MikroBus Spectral_click
+U 1 1 5CC595E4
+P 6750 2900
+F 0 "Spectral_click" H 6750 3565 50  0000 C CNN
+F 1 "MikroBus" H 6750 3474 50  0000 C CNN
+F 2 "" H 6750 3400 50  0001 C CNN
+F 3 "" H 6750 3400 50  0001 C CNN
+	1    6750 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L ClickBoards:MikroBus Motion_click
+U 1 1 5CC59640
+P 7900 2900
+F 0 "Motion_click" H 7900 3565 50  0000 C CNN
+F 1 "MikroBus" H 7900 3474 50  0000 C CNN
+F 2 "" H 7900 3400 50  0001 C CNN
+F 3 "" H 7900 3400 50  0001 C CNN
+	1    7900 2900
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
