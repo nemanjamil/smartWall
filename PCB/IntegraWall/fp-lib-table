@@ -1,3 +1,4 @@
 (fp_lib_table
-  (lib (name "mikroBUS Logo")(type KiCad)(uri "${KIPRJMOD}/Click_boards/mikroBUS Logo")(options "")(descr ""))
+  (lib (name "mikroBUS Logo")(type KiCad)(uri "${KIPRJMOD}/Click_boards/mikroBUS Logo")(options "")(descr "")(disabled))
+  (lib (name Click_boards)(type KiCad)(uri ${KIPRJMOD}/Click_boards.pretty)(options "")(descr ""))
 )

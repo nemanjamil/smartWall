@@ -1,6 +1,24 @@
-var wantedMeasurements = ["temperature", "humidity", "pressure", "Color temperature", "CO2", "O2", "TVOC"];
-var nameMappings = ['Temperature', "Humidity", "Pressure", "Light temperature", "CO<sub>2</sub>","O<sub>2</sub>", "Volatile compounds"];
-var significantDigits = [2,2,3,2,2,3,2]
+var wantedMeasurements = [
+    "temperature", 
+    "humidity", 
+    "pressure", 
+    "Color temperature", 
+    "CO2", 
+    "O2", 
+    "TVOC",
+    "PM10",
+    "PM2.5"];
+var nameMappings = [
+    'Temperature', 
+    "Humidity", 
+    "Pressure",
+    "Light temperature", 
+    "CO<sub>2</sub>",
+    "O<sub>2</sub>", 
+    "Volatile compounds",
+    "PM<sub>10</sub>",
+    "PM<sub>2.5</sub>"];
+var significantDigits = [2,2,3,2,2,3,2,2,2]
 var updateInterval = null;
 var updateDisplayInterval = null;
 var changeDisplayMeasurementInterval = null;

@@ -1,8 +1,4 @@
-if __name__ == "__main__":
-    from AbstractSensor import AbstractSensor
-else:
-    from .AbstractSensor import AbstractSensor
-
+from .AbstractSensor import AbstractSensor
 from spidev import SpiDev
 import gpiozero
 import struct

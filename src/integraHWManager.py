@@ -17,6 +17,7 @@ from integraHardware.CO2Led import CO2Led
 from integraHardware.BackgroundLED import BackgroundLED
 from integraHardware.O2Led import O2Led
 from integraHardware.DustLed import DustLed
+from integraHardware.DustSensor import DustSensor
 class IntegraHWManager:
 
     def __init__(self, autoRefresh=False, autoRefreshPeriod=1, log=False, logFilename="", logPeriod=1):
@@ -26,7 +27,8 @@ class IntegraHWManager:
                          CO2Tvoc(), 
                          SpectralSensor(), 
                          MotionSensor(), 
-                         O2Sensor()
+                         O2Sensor(),
+                         DustSensor()
                         ]
         self.leds = [ CO2Led(self.getAllDicts), 
                       BackgroundLED(self.getAllDicts), 

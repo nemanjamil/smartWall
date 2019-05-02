@@ -53,7 +53,7 @@ U 1 1 5CC595E4
 P 7500 1400
 F 0 "Spectral_click1" H 7500 2065 50  0000 C CNN
 F 1 "MikroBus" H 7500 1974 50  0000 C CNN
-F 2 "Click_boards:Click_board" H 7500 1900 50  0001 C CNN
+F 2 "Click_boards:Spectral_click" H 7500 1900 50  0001 C CNN
 F 3 "" H 7500 1900 50  0001 C CNN
 	1    7500 1400
 	1    0    0    -1  
@@ -377,17 +377,6 @@ F 3 "" H 4900 3900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R_led1
-U 1 1 5CC80E48
-P 4900 3350
-F 0 "R_led1" H 4970 3396 50  0000 L CNN
-F 1 "RledCo2" H 4970 3305 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 4830 3350 50  0001 C CNN
-F 3 "~" H 4900 3350 50  0001 C CNN
-	1    4900 3350
-	1    0    0    -1  
-$EndComp
-$Comp
 L Connector:Screw_Terminal_01x06 J3
 U 1 1 5CC83021
 P 7800 3950
@@ -398,8 +387,6 @@ F 3 "~" H 7800 3950 50  0001 C CNN
 	1    7800 3950
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4900 3200 4900 3100
 $Comp
 L Device:R R3
 U 1 1 5CC8B3B5
@@ -420,17 +407,6 @@ F 1 "GND" H 4905 4777 50  0000 C CNN
 F 2 "" H 4900 4950 50  0001 C CNN
 F 3 "" H 4900 4950 50  0001 C CNN
 	1    4900 4950
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R_led3
-U 1 1 5CC8B3C3
-P 4900 4400
-F 0 "R_led3" H 4970 4446 50  0000 L CNN
-F 1 "RledO2" H 4970 4355 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 4830 4400 50  0001 C CNN
-F 3 "~" H 4900 4400 50  0001 C CNN
-	1    4900 4400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -456,17 +432,6 @@ F 3 "" H 6500 3900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R_led2
-U 1 1 5CC8D94E
-P 6500 3350
-F 0 "R_led2" H 6570 3396 50  0000 L CNN
-F 1 "Rledbck" H 6570 3305 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 6430 3350 50  0001 C CNN
-F 3 "~" H 6500 3350 50  0001 C CNN
-	1    6500 3350
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R4
 U 1 1 5CC8D95C
 P 6050 4750
@@ -486,17 +451,6 @@ F 1 "GND" H 6505 4777 50  0000 C CNN
 F 2 "" H 6500 4950 50  0001 C CNN
 F 3 "" H 6500 4950 50  0001 C CNN
 	1    6500 4950
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R_led4
-U 1 1 5CC8D96A
-P 6500 4400
-F 0 "R_led4" H 6570 4446 50  0000 L CNN
-F 1 "Rleddust2" H 6570 4355 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 6430 4400 50  0001 C CNN
-F 3 "~" H 6500 4400 50  0001 C CNN
-	1    6500 4400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -521,17 +475,6 @@ F 3 "" H 5650 6000 50  0001 C CNN
 	1    5650 6000
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R_led5
-U 1 1 5CC90F86
-P 5650 5450
-F 0 "R_led5" H 5720 5496 50  0000 L CNN
-F 1 "Rledbckup" H 5720 5405 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 5580 5450 50  0001 C CNN
-F 3 "~" H 5650 5450 50  0001 C CNN
-	1    5650 5450
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4900 3100 7450 3100
 Wire Wire Line
@@ -545,23 +488,17 @@ Wire Wire Line
 Wire Wire Line
 	6500 3200 7400 3200
 Wire Wire Line
-	4900 4250 4900 4150
-Wire Wire Line
 	4900 4150 7400 4150
 Wire Wire Line
 	7400 4150 7400 3950
 Wire Wire Line
 	7400 3950 7600 3950
 Wire Wire Line
-	6500 4250 6500 4200
-Wire Wire Line
 	6500 4200 7450 4200
 Wire Wire Line
 	7450 4200 7450 4050
 Wire Wire Line
 	7450 4050 7600 4050
-Wire Wire Line
-	5650 5300 5650 5200
 Wire Wire Line
 	5650 5200 7500 5200
 Wire Wire Line
@@ -686,4 +623,58 @@ Wire Wire Line
 	3100 1300 3100 1250
 Wire Wire Line
 	3100 1250 3200 1250
+Wire Wire Line
+	4900 3100 4900 3500
+Wire Wire Line
+	6500 3200 6500 3500
+Wire Wire Line
+	4900 4150 4900 4550
+Wire Wire Line
+	6500 4200 6500 4550
+Wire Wire Line
+	5650 5200 5650 5600
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 5CCE581A
+P 1000 4500
+F 0 "H1" H 1100 4546 50  0000 L CNN
+F 1 "MountingHole" H 1100 4455 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad" H 1000 4500 50  0001 C CNN
+F 3 "~" H 1000 4500 50  0001 C CNN
+	1    1000 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 5CCE5967
+P 1000 4700
+F 0 "H2" H 1100 4746 50  0000 L CNN
+F 1 "MountingHole" H 1100 4655 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad" H 1000 4700 50  0001 C CNN
+F 3 "~" H 1000 4700 50  0001 C CNN
+	1    1000 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 5CCE59A3
+P 1000 4900
+F 0 "H3" H 1100 4946 50  0000 L CNN
+F 1 "MountingHole" H 1100 4855 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad" H 1000 4900 50  0001 C CNN
+F 3 "~" H 1000 4900 50  0001 C CNN
+	1    1000 4900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 5CCE59E1
+P 1000 5100
+F 0 "H4" H 1100 5146 50  0000 L CNN
+F 1 "MountingHole" H 1100 5055 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad" H 1000 5100 50  0001 C CNN
+F 3 "~" H 1000 5100 50  0001 C CNN
+	1    1000 5100
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
