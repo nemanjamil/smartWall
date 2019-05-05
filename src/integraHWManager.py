@@ -57,11 +57,12 @@ class IntegraHWManager:
         # If logging is enabled, build log file 
         # and start logging
         if(self.log):
-            self.logFile = datetime.now().strftime("log/%d_%m_%Y__%H_%M_%S_") + logFilename
+            self.logFile = logFilename
             self.logPeriod = logPeriod
             with open(self.logFile,"w") as fileHandle:
                 writer = csv.writer(fileHandle)
-                writer.writerow(self.measurementTypes)
+                measurements = self.measurementTypes
+                writer.writerow(measurements + ["Datetime"])
             self.doLog()
     
     ## @brief Do a refresh of all sensors
@@ -125,7 +126,9 @@ class IntegraHWManager:
         with open(self.logFile, "a") as outFile:
             writer = csv.writer(outFile)
             towrite = self.getAllMeasurementVals()
-            writer.writerow(towrite)
+            stringVals = list(str(e) for e in towrite)
+            stringVals.append(datetime.now().strftime("%d.%m.%Y. %H:%M:%S"))
+            writer.writerow(stringVals)
         if(self.log):
             self.logt = Timer(self.logPeriod, self.doLog)
             self.logt.daemon = True
