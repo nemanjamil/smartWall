@@ -14,7 +14,7 @@ class IntegraLED:
         FadeOut = 3
         Unknown = 4
             
-    def __init__(self, channel, levels=500, linear=False):
+    def __init__(self, channel, levels=1000, linear=False):
         self.factory = PiGPIOFactory()
         self.led = PWMLED(channel, pin_factory=self.factory)
         self.led.off()

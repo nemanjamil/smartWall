@@ -3,10 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
     <title>Integra Wall</title>
     <link rel="stylesheet" type="text/css" media="screen" 
         href="{{ url_for('static', filename='stylesheet.css') }}">
-    <script type=text/javascript 
+    <script type="text/javascript" 
+        src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script type="text/javascript" 
         src="{{ url_for('static', filename='jquery.js') }}"></script>
     
 </head>
@@ -16,9 +19,10 @@
     <ul>
         {% for file in files: %}
         {% set filename = pathModule.basename(file) %}
-        <li><a href="logfile/{{filename}}" >{{ filename }}</a></li>
+        <li><a href="logfile/{{filename}}" download>{{ filename }}</a></li>
         {% endfor %}
     </ul>
     {% endblock %}
+    <p><button onclick="clearLogs()" type="button">Clear all logfiles</button></p>
 </body>
 </html>

@@ -4,21 +4,34 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Integra Wall</title>
+    
     <link rel="stylesheet" type="text/css" media="screen" 
         href="{{ url_for('static', filename='stylesheet.css') }}">
-    <script type=text/javascript 
+    <script type="text/javascript"
         src="{{ url_for('static', filename='jquery.js') }}"></script>
-    <script type=text/javascript 
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='displayClasses.js') }}"></script>
+    <script type="text/javascript" 
         src="{{ url_for('static', filename='scripts.js') }}"></script>
     
+    <script type="text/javascript">
+        $(
+            function(){
+                measurementBodyLoaded()
+            }
+        );
+    </script>
 </head>
 <body>
-    <div id="mainDiv" class="centered">
-        <div id="measurementName" class="centered">
-            ----
-        </div>
-        <div id="measurementValue" class="centered"> 
-            --- --
+    <div id="outerDiv">
+        <div id="mainDiv" class="centered">
+            <div id="measurementName" class="centered">
+                ----
+            </div>
+            <img id="logo" class="centered"/>
+            <div id="measurementValue" class="centered"> 
+                --- --
+            </div>
         </div>
     </div>
 </body>

@@ -53,18 +53,22 @@ class IntegraHWManager:
             self.interval = autoRefreshPeriod
             self.refresh()
         self.log = log
-
+        if(self.log):
+            self.logPeriod = logPeriod
+            
         # If logging is enabled, build log file 
         # and start logging
+        self.reInitLogfile(logFilename)
+    
+    ## @brief Init a logfile and start logging
+    def reInitLogfile(self, logFilename):
         if(self.log):
             self.logFile = logFilename
-            self.logPeriod = logPeriod
             with open(self.logFile,"w") as fileHandle:
                 writer = csv.writer(fileHandle)
                 measurements = self.measurementTypes
                 writer.writerow(measurements + ["Datetime"])
             self.doLog()
-    
     ## @brief Do a refresh of all sensors
     def refresh(self):
         # Go through all of the sensors and perform
