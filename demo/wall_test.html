@@ -4,15 +4,27 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Integra Wall</title>
+    
     <link rel="stylesheet" type="text/css" media="screen" href="wall_test_files/stylesheet.css">
     <script type="text/javascript" src="wall_test_files/jquery.js"></script>
+    <script type="text/javascript" src="wall_test_files/displayClasses.js"></script>
     <script type="text/javascript" src="wall_test_files/scripts.js"></script>
     
+    <script type="text/javascript">
+        $(
+            function(){
+                measurementBodyLoaded()
+            }
+        );
+    </script>
 </head>
 <body>
-    <div id="mainDiv" class="centered">
-        <div id="measurementName" class="centered">Temperature</div>
-        <div id="measurementValue" class="centered">17 ℃</div>
+    <div id="outerDiv">
+        <div id="mainDiv" class="centered">
+            <div id="measurementName" class="centered">Humidity</div>
+            <img src="wall_test_files/noviModel.png" id="logo" style="display: none;" height="200">
+            <div id="measurementValue" class="centered">53 %</div>
+        </div>
     </div>
 
 </body></html>

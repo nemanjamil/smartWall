@@ -1,25 +1,3 @@
-var wantedMeasurements = [
-    "temperature", 
-    "humidity", 
-    "pressure", 
-    "Color temperature", 
-    "CO2", 
-    "O2", 
-    "TVOC",
-    "PM10",
-    "PM2.5"];
-var nameMappings = [
-    'Temperature', 
-    "Humidity", 
-    "Pressure",
-    "Light temperature", 
-    "CO<sub>2</sub>",
-    "O<sub>2</sub>", 
-    "Volatile compounds",
-    "PM<sub>10</sub>",
-    "PM<sub>2.5</sub>"];
-var significantDigits = [2,2,3,2,2,3,2,2,2];
-
 var displayItems = [
     new MeasurementItem("temperature", "Temperature", 2),
     new MeasurementItem("humidity", "Humidity", 2),
