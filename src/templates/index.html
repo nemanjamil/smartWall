@@ -10,6 +10,10 @@
     <script type="text/javascript"
         src="{{ url_for('static', filename='jquery.js') }}"></script>
     <script type="text/javascript"
+        src="{{ url_for('static', filename='zingtouch.min.js') }}"></script>
+        
+    
+    <script type="text/javascript"
         src="{{ url_for('static', filename='displayClasses.js') }}"></script>
     <script type="text/javascript" 
         src="{{ url_for('static', filename='scripts.js') }}"></script>
@@ -24,13 +28,15 @@
 </head>
 <body>
     <div id="outerDiv">
-        <div id="mainDiv" class="centered">
-            <div id="measurementName" class="centered">
-                ----
-            </div>
-            <img id="logo" class="centered"/>
-            <div id="measurementValue" class="centered"> 
-                --- --
+        <div id="mockBorder" style="width: 800px; height: 480px; margin:auto; border-style: none; border-color: white; padding:0px;">
+            <div id="mainDiv" class="centered">
+                <div id="measurementName" class="centered">
+                    ----
+                </div>
+                <img id="logo" style="display: none;">
+                <div id="measurementValue" class="centered"> 
+                    --- --
+                </div>
             </div>
         </div>
     </div>

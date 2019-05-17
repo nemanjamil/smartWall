@@ -1,32 +1,55 @@
 var displayItems = [
-    new MeasurementItem("temperature", "Temperature", 2),
-    new MeasurementItem("humidity", "Humidity", 2),
-    new MeasurementItem("pressure", "Pressure", 3),
-    new MeasurementItem("Color temperature", "Light temperature", 2),
+    new ImageItem("imgs/NMeng.jpg", 800, 480),
+    new MeasurementItem("temperature", "temperature", 2),
+    new MeasurementItem("humidity", "humidity", 2),
+    new MeasurementItem("pressure", "pressure", 3),
+    new MeasurementItem("Color temperature", "light temperature", 2),
     new MeasurementItem("CO2", "CO<sub>2</sub>", 2),
-    new ImageItem("static/imgs/sensor.svg", 400, 500),
-    new MeasurementItem("O2", "O<sub>2</sub>", 3),
-    new MeasurementItem("TVOC", "Volatile compounds", 2),
+    new MeasurementItem("O2", "oxygen", 3),
+    new MeasurementItem("TVOC", "volatile compounds", 2),
     new MeasurementItem("PM10", "PM<sub>10</sub>", 2),
     new MeasurementItem("PM2.5", "PM<sub>2.5</sub>", 2),
-    new ImageItem("static/imgs/noviModel.png", 300, 200)
+    new ImageItem("imgs/NMsrp.jpg", 800, 480),
+    new MeasurementItem("temperature", "температура", 2),
+    new MeasurementItem("humidity", "влажност ваздуха", 2),
+    new MeasurementItem("pressure", "притисак", 3),
+    new MeasurementItem("Color temperature", "температура светла", 2),
+    new MeasurementItem("CO2", "CO<sub>2</sub>", 2),
+    new MeasurementItem("O2", "кисеоник", 3),
+    new MeasurementItem("TVOC", "лако испарљива органска једињења", 2),
+    new MeasurementItem("PM10", "PM<sub>10</sub>", 2),
+    new MeasurementItem("PM2.5", "PM<sub>2.5</sub>", 2),
 ];
+
+
+var randomItems = [];
 
 var updateInterval = null;
 var updateDisplayInterval = null;
 var changeDisplayMeasurementInterval = null;
 var values = null;
+var imgPresentInterval = [3, 6];
+var clickswap = true;
 
-var currentIdx = 0;
 var refreshTime_ms = 1000;
 var changeTime_ms = 10000;
-
+var isTestEnvironment = true;
 
 // Get the JSON data using jquery
 function updateValues(){
     $.getJSON("/measurements.json", success=function(data){values=data;});
 }
 
+function gotRandomImgs(data){
+    imgFilenames = data.imgs;
+    for(i = 0; i<imgFilenames.length; i++){
+        randomItems += [new ImageItem(imgFilenames, 800, 480)];
+    }
+}
+
+function getRandomImgs(){
+    $.getJSON("/randimgs_list.json", success=gotRandomImgs);
+}
 // Perform a display update (change the displayed values)
 function updateDisplay(){
     if(values){
@@ -34,10 +57,41 @@ function updateDisplay(){
     }
 }
 
+function getRandomIncrement(){
+    Math.floor(Math.random() * (imgPresentInterval[1] - imgPresentInterval[0])) + imgPresentInterval[0];
+}
+
+var nextRandomImgIdx = getRandomIncrement();
+var currentIdx = 0;
+var currentRandIdx = 0;
+
 // Change the measurement idx
 function changeDisplayMeasurement(){
     currentIdx = (currentIdx + 1) % displayItems.length;
+    if(currentIdx == nextRandomImgIdx & randomItems){
+        currentDisplayItem = randomItems[currentRandIdx];
+        currentRandIdx = (currentRandIdx + 1) & randomItems.length;
+        nextRandomImgIdx += getRandomIncrement();
+        currentIdx--;
+    }else{
+        currentDisplayItem = displayItems[currentRandIdx];
+    }
+    if(currentIdx == 0){
+        currentRandIdx = getRandomIncrement();
+
+    }
     console.log("Changed")
+}
+
+function mainDivSwyped(e){
+    direction = e.detail.data[0].currentDirection;
+    if(!direction || (direction > 100 && direction < 260)){
+        console.log("swiped")
+        clearInterval(changeDisplayMeasurementInterval);
+        changeDisplayMeasurementInterval = setInterval(changeDisplayMeasurement,changeTime_ms);
+        changeDisplayMeasurement();
+        updateDisplay();
+    }
 }
 
 function mainDivClicked(){
@@ -47,13 +101,18 @@ function mainDivClicked(){
     changeDisplayMeasurement();
     updateDisplay();
 }
-console.log(mainDivClicked)
 function measurementBodyLoaded(){
     updateInterval = setInterval(updateValues, refreshTime_ms);
     updateDisplayInterval = setInterval(updateDisplay, refreshTime_ms);
     changeDisplayMeasurementInterval = setInterval(changeDisplayMeasurement, changeTime_ms);
     DisplayableItem.setMeasurementGetter(function(){return values;})
-    $("body").bind('click', mainDivClicked)
+
+    if(clickswap){
+        $("body").on('click', mainDivClicked)
+    }else{
+        touchRegion = ZingTouch.Region($("#outerDiv")[0]);
+        touchRegion.bind($("#outerDiv")[0], 'swipe', mainDivSwyped);
+    }
     updateValues();
 }
 

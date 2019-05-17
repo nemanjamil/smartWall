@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'CenturyGothic';
+    src: url('/static/CenturyGothic.eot');
+    src: url('/static/CenturyGothic.eot') format('embedded-opentype'),
+         url('/static/CenturyGothic.woff2') format('woff2'),
+         url('/static/CenturyGothic.woff') format('woff'),
+         url('/static/CenturyGothic.ttf') format('truetype'),
+         url('/static/CenturyGothic.svg#CenturyGothic') format('svg');
+}
+
 body{
     background-color: rgb(2, 0, 25);
     text-align: center;
@@ -15,26 +25,37 @@ body{
     transform: translate(-50%, -50%);
     text-align: center;
 }
+#mockBorder{
+    margin: auto;
+    position: fixed;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+}
 #measurementName{
 
-    color: antiquewhite;
-    font-size: 30pt;
-    margin: auto;
-    font-family: sans-serif;
+    color: #ffffff;
+    font-size: 76px;
+    line-height: 1em;
+    width: 780px;
+    font-family: 'CenturyGothic', Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+    padding-bottom: 28pt;
 }
 #measurementValue{
 
 
-    color: beige;
-    font-size: 60pt ;
-    text-size-adjust: auto;
-    font-family: sans-serif;
+    color: #ffffff;
+    font-size: 90px;
+    line-height: 1em;
+    width: 780px;
+    word-wrap: none;
+    font-family: 'CenturyGothic', Century Gothic, CenturyGothic, AppleGothic, sans-serif;
 }
 #logo{
     margin:auto;
 }
 .Normal{
-    color: beige;
+    color: #ffffff;
     text-align: left;
 }
 a{
