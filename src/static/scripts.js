@@ -1,5 +1,5 @@
 var displayItems = [
-    new ImageItem("imgs/NMeng.jpg", 800, 480),
+    new ImageItem("imgs/NMeng.png", 800, 480),
     new MeasurementItem("temperature", "temperature", 2),
     new MeasurementItem("humidity", "humidity", 2),
     new MeasurementItem("pressure", "pressure", 3),
@@ -9,7 +9,7 @@ var displayItems = [
     new MeasurementItem("TVOC", "volatile compounds", 2),
     new MeasurementItem("PM10", "PM<sub>10</sub>", 2),
     new MeasurementItem("PM2.5", "PM<sub>2.5</sub>", 2),
-    new ImageItem("imgs/NMsrp.jpg", 800, 480),
+    new ImageItem("imgs/NMsrp.png", 800, 480),
     new MeasurementItem("temperature", "температура", 2),
     new MeasurementItem("humidity", "влажност ваздуха", 2),
     new MeasurementItem("pressure", "притисак", 3),
@@ -22,7 +22,7 @@ var displayItems = [
 ];
 
 
-var randomItems = [];
+var randomItems = null;
 
 var updateInterval = null;
 var updateDisplayInterval = null;
@@ -30,10 +30,11 @@ var changeDisplayMeasurementInterval = null;
 var values = null;
 var imgPresentInterval = [3, 6];
 var clickswap = true;
+var currentDisplayItem = null;
 
 var refreshTime_ms = 1000;
 var changeTime_ms = 10000;
-var isTestEnvironment = true;
+var isTestEnvironment = false;
 
 // Get the JSON data using jquery
 function updateValues(){
@@ -42,8 +43,9 @@ function updateValues(){
 
 function gotRandomImgs(data){
     imgFilenames = data.imgs;
+    randomItems = [];
     for(i = 0; i<imgFilenames.length; i++){
-        randomItems += [new ImageItem(imgFilenames, 800, 480)];
+        randomItems.push(new ImageItem(imgFilenames[i], 800, 480));
     }
 }
 
@@ -52,13 +54,13 @@ function getRandomImgs(){
 }
 // Perform a display update (change the displayed values)
 function updateDisplay(){
-    if(values){
-        displayItems[currentIdx].display();
+    if(currentDisplayItem){
+        currentDisplayItem.display();
     }
 }
 
 function getRandomIncrement(){
-    Math.floor(Math.random() * (imgPresentInterval[1] - imgPresentInterval[0])) + imgPresentInterval[0];
+    return Math.floor(Math.random() * (imgPresentInterval[1] - imgPresentInterval[0])) + imgPresentInterval[0];
 }
 
 var nextRandomImgIdx = getRandomIncrement();
@@ -68,17 +70,16 @@ var currentRandIdx = 0;
 // Change the measurement idx
 function changeDisplayMeasurement(){
     currentIdx = (currentIdx + 1) % displayItems.length;
-    if(currentIdx == nextRandomImgIdx & randomItems){
+    if(currentIdx == nextRandomImgIdx && randomItems != null){
         currentDisplayItem = randomItems[currentRandIdx];
-        currentRandIdx = (currentRandIdx + 1) & randomItems.length;
-        nextRandomImgIdx += getRandomIncrement();
+        currentRandIdx = (currentRandIdx + 1) % randomItems.length;
+        nextRandomImgIdx = (nextRandomImgIdx + getRandomIncrement()) % displayItems.length;
         currentIdx--;
     }else{
-        currentDisplayItem = displayItems[currentRandIdx];
+        currentDisplayItem = displayItems[currentIdx];
     }
     if(currentIdx == 0){
-        currentRandIdx = getRandomIncrement();
-
+        nextRandomImgIdx = getRandomIncrement();
     }
     console.log("Changed")
 }
@@ -102,17 +103,23 @@ function mainDivClicked(){
     updateDisplay();
 }
 function measurementBodyLoaded(){
-    updateInterval = setInterval(updateValues, refreshTime_ms);
-    updateDisplayInterval = setInterval(updateDisplay, refreshTime_ms);
-    changeDisplayMeasurementInterval = setInterval(changeDisplayMeasurement, changeTime_ms);
-    DisplayableItem.setMeasurementGetter(function(){return values;})
-
+    
     if(clickswap){
         $("body").on('click', mainDivClicked)
     }else{
         touchRegion = ZingTouch.Region($("#outerDiv")[0]);
         touchRegion.bind($("#outerDiv")[0], 'swipe', mainDivSwyped);
     }
+    if(isTestEnvironment){
+        $("#mockBorder")[0].style.borderStyle = "solid";
+    }
+
+    getRandomImgs();
+    updateInterval = setInterval(updateValues, refreshTime_ms);
+    updateDisplayInterval = setInterval(updateDisplay, refreshTime_ms);
+    changeDisplayMeasurementInterval = setInterval(changeDisplayMeasurement, changeTime_ms);
+    DisplayableItem.setMeasurementGetter(function(){return values;})
+    currentDisplayItem = displayItems[0];
     updateValues();
 }
 

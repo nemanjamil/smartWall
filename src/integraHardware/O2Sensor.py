@@ -33,7 +33,8 @@ class O2Sensor(AbstractSensor):
         self._spi.max_speed_hz = 500
         self._spi.no_cs = True
         self.generateCalibCurve()
-
+    def reset(self):
+        time.sleep(0.01)
     def poll(self):
         self._CS.value = False
         time.sleep(0.09)

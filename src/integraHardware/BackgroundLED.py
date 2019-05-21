@@ -11,8 +11,11 @@ class BackgroundLED(AbstractLEDController):
         offDelay=True, 
         offDelayPeriod=8)
         self.threshold = 20 # lux
+        self.tvocThreshold = 200
     def processMeasurement(self, measurement):
-        res = (measurement["LUX"]["value"] < self.threshold) | (measurement["Motion"]["value"])
+        res = ((measurement["LUX"]["value"] < self.threshold) | 
+        (measurement["Motion"]["value"]) | 
+        (measurement["TVOC"]["value"] > self.tvocThreshold))
         return res
 
 

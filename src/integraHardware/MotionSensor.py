@@ -13,6 +13,8 @@ class MotionSensor(AbstractSensor):
         self.measurements = {
                 "Motion" : [False,""],
             }
+    def reset(self):
+        time.sleep(0.01)
     def poll(self):
         self.measurements["Motion"][0] = self.sensor.motion_detected
 

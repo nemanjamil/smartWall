@@ -98,21 +98,28 @@ class SpectralSensor(AbstractSensor):
     def sensorID(self):
         return "AS7261"
 
+    def reset(self):
+        oldControl = self.readVirtualReg(V_Control_Setup)
+        self.writeVirtualReg(V_Control_Setup, oldControl | 0x80)
+        time.sleep(1)
+        
+        oldControl = self.readVirtualReg(V_Control_Setup)
+        newControl = oldControl & ~0x30
+        newControl = oldControl | 0x30
+        self.writeVirtualReg(V_Control_Setup, newControl)
+        self.writeVirtualReg(V_LED_Control, 0x00)
 
-
+        
+        
     def __init__(self):    
         AbstractSensor.__init__(self)
+        self.reset()
         self.measurements = {
             "Color temperature" : [-1,"K"],
             "DUV" : [-1, ""],
             "LUX" : [-1, "lx"] 
         }
-        self.writeVirtualReg(V_LED_Control, 0x00)
-        oldControl = self.readVirtualReg(V_Control_Setup)
-        newControl = oldControl & ~0x30
-        newControl = oldControl | 0x30
-        
-        self.writeVirtualReg(V_Control_Setup, newControl)
+
 
     def poll(self):
         try:

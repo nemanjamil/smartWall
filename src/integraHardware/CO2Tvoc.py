@@ -31,7 +31,10 @@ class CO2Tvoc(AbstractSensor):
     def reset(self):
         with SMBusWrapper(1) as bus:
             bus.write_byte(self.i2cAddr, 0xF4, force=True)
-
+            self.writeSensorReg(0x01, [0x10])
+        time.sleep(1)
+        while(self.readSensorReg(STATUS,1)[0] & 0x01):
+            time.sleep(0.05)
     def sensorID(self):
         return "CCS811"
 
@@ -39,7 +42,6 @@ class CO2Tvoc(AbstractSensor):
     def __init__(self):
         AbstractSensor.__init__(self)
         self.reset()
-        self.writeSensorReg(0x01, [0x10])
 
         self.measurements = {
             "TVOC" : [-1,"ppb"],

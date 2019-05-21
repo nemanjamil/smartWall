@@ -12,12 +12,14 @@ from integraHardware.CO2Tvoc import CO2Tvoc
 from integraHardware.MotionSensor import MotionSensor
 from integraHardware.SpectralSensor import SpectralSensor
 from integraHardware.O2Sensor import O2Sensor
+from integraHardware.DustSensor import DustSensor
+from integraHardware.InteractionSensor import InteractionSensor
 
 from integraHardware.CO2Led import CO2Led
 from integraHardware.BackgroundLED import BackgroundLED
 from integraHardware.O2Led import O2Led
 from integraHardware.DustLed import DustLed
-from integraHardware.DustSensor import DustSensor
+from integraHardware.BacklightLCD import BacklightLCD
 class IntegraHWManager:
 
     def __init__(self, autoRefresh=False, autoRefreshPeriod=1, log=False, logFilename="", logPeriod=1):
@@ -28,16 +30,20 @@ class IntegraHWManager:
                          SpectralSensor(), 
                          MotionSensor(), 
                          O2Sensor(),
-                         DustSensor()
+                         DustSensor(),
+                         InteractionSensor()
                         ]
         self.leds = [ CO2Led(self.getAllDicts), 
                       BackgroundLED(self.getAllDicts), 
                       O2Led(self.getAllDicts),
-                      DustLed(self.getAllDicts)
+                      DustLed(self.getAllDicts),
+                      BacklightLCD(self.getAllDicts)
                     ]
         self.measurementSources = dict()
         self.dicts = dict()
         self.measurementTypes = []
+        self.resetInterval = 60
+        self.reset()
 
         # Initialize connections with sensors
         for sensor in self.sensors:
@@ -49,13 +55,14 @@ class IntegraHWManager:
         # If refreshing is performed automatically (preferred)
         # initialize the refresh routines and start
         self.autoRefresh = autoRefresh
+        
+
         if (self.autoRefresh):
             self.interval = autoRefreshPeriod
             self.refresh()
         self.log = log
         if(self.log):
             self.logPeriod = logPeriod
-            
         # If logging is enabled, build log file 
         # and start logging
         self.reInitLogfile(logFilename)
@@ -88,7 +95,12 @@ class IntegraHWManager:
             self.t.daemon = True
             self.t.start()
         
-        
+    def reset(self):
+        for sensor in self.sensors:
+            sensor.performReset()
+        self.tReset = Timer(self.resetInterval, self.reset)
+        self.tReset.daemon = True
+        self.tReset.start()    
     ## @brief Acquire the measurement value
     # using the joined measurement types
     def getMeasurementValue(self, meastype):

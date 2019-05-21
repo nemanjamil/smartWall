@@ -37,7 +37,8 @@ class DustSensor(AbstractSensor):
         self.t = Timer(self.intermediatePoll, self.pollSerial)
         self.t.daemon = True
         self.t.start()
-        
+    def reset(self):
+        time.sleep(0.01)
     def poll(self):
         self.lock.acquire()
         self.measurements["PM2.5"][0] = (self.odbuf[0] + (self.odbuf[1] << 8)) / 10

@@ -15,6 +15,13 @@ class AbstractSensor:
         self.measurementSem = threading.Lock()
         self.measurements = None
     
+
+    def reset(self):
+        pass
+    def performReset(self):
+        self.measurementSem.acquire()
+        self.reset()
+        self.measurementSem.release()
     @property
     ## This contains the product code of 
     #  currently used sensor

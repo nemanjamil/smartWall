@@ -26,7 +26,11 @@ class MeasurementItem extends DisplayableItem{
         var measurementValue = DisplayableItem.getRoundedValue(measurement.value, this.precision);
         $("#measurementName").html(this.displayName);
         $("#measurementValue").html(String(measurementValue) + " " + measurement.unit);
+        
         $("#logo").hide();
+        
+        $("#measurementName").show();
+        $("#measurementValue").show();
     }
 }
 
@@ -47,6 +51,8 @@ class ImageItem extends DisplayableItem{
         $("#logo").replaceWith(this.image);
         $("#measurementName").html("");
         $("#measurementValue").html("");
+        $("#measurementName").hide();
+        $("#measurementValue").hide();
         $("#logo").show()
     }
 }

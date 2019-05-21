@@ -19,7 +19,10 @@ class WeatherSensor(AbstractSensor):
         }
         with SMBusWrapper(1) as bus:
             self.calib_params = bme280.load_calibration_params(bus, self.i2cAddr)
-        
+    
+    def reset(self):
+        time.sleep(0.01)
+
     def poll(self):
         with SMBusWrapper(1) as bus:
             data = bme280.sample(bus, self.i2cAddr, self.calib_params)

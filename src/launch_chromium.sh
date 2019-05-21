@@ -1,6 +1,6 @@
 #! /bin/bash
 export DISPLAY=:0
-chromium-browser 127.0.0.1:5000/ \
+chromium-browser 127.0.0.1:5000 \
     --kiosk \
     --incognito \
     --disable-infobars \
@@ -12,4 +12,5 @@ chromium-browser 127.0.0.1:5000/ \
     --disable-shared-workers \
     --disable-voice-input \
     --enable-aggressive-domstorage-flushing \
-    --enable-offline-auto-reload
+    --enable-offline-auto-reload \
+    --enable-ipv6

@@ -1,17 +1,18 @@
 from .AbstractLEDController import AbstractLEDController
-from .IntegraLED import IntegraLED
+from .IntegraLCDBack import IntegraLCDBack
 
-class O2Led(AbstractLEDController):
+class BacklightLCD(AbstractLEDController):
     def __init__(self, getMeasurementCallback):
         AbstractLEDController.__init__(self,
-        LED=IntegraLED("GPIO22"),
+        LED=IntegraLCDBack(offLvl=15),
         getMeasurementCallback=getMeasurementCallback,
         fading=True, 
         fadingInterval=1,
         offDelay=True, 
-        offDelayPeriod=5)
-        self.threshold = 19.5 # %
+        offDelayPeriod=1800)
+        
     def processMeasurement(self, measurement):
-        return measurement["O2"]["value"] < self.threshold
+        res = (measurement["Motion"]["value"]) | (measurement["Interaction"]["value"])
+        return res
 
 
