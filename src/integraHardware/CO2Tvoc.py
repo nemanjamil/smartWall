@@ -33,21 +33,28 @@ class CO2Tvoc(AbstractSensor):
             bus.write_byte(self.i2cAddr, 0xF4, force=True)
             self.writeSensorReg(0x01, [0x10])
         time.sleep(1)
-        while(self.readSensorReg(STATUS,1)[0] & 0x01):
+        i = 0
+        while((self.readSensorReg(STATUS,1)[0] & 0x01) and i < 5000):
             time.sleep(0.05)
+            i += 1
+        
     def sensorID(self):
         return "CCS811"
 
 
     def __init__(self):
         AbstractSensor.__init__(self)
-        self.reset()
-
+        try:
+            self.reset()
+        except:
+            print("An error occured")
         self.measurements = {
             "TVOC" : [-1,"ppb"],
             "CO2" : [-1,"ppm"]
         }
-        if(self.readSensorReg(STATUS,1)[0] & 0x01):
+        status = self.readSensorReg(STATUS,1)[0]
+        
+        if(status & 0x01):
             print("Sensor returned bad status")
 
     def poll(self):
@@ -65,3 +72,9 @@ class CO2Tvoc(AbstractSensor):
 
 
     
+if __name__ == "__main__":
+    sensor = CO2Tvoc()
+    while True:
+        sensor.poll()
+        print(sensor.measurements)
+        time.sleep(1)
