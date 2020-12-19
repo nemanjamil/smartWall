@@ -1,4 +1,7 @@
-from .AbstractSensor import AbstractSensor
+if __name__ == "__main__":
+    from AbstractSensor import AbstractSensor
+else:
+    from .AbstractSensor import AbstractSensor
 from smbus2 import SMBusWrapper, i2c_msg
 import time
 STATUS = 0X00
@@ -31,7 +34,7 @@ class CO2Tvoc(AbstractSensor):
     def reset(self):
         with SMBusWrapper(1) as bus:
             bus.write_byte(self.i2cAddr, 0xF4, force=True)
-            self.writeSensorReg(0x01, [0x10])
+            self.writeSensorReg(0x01, [0x20])
         time.sleep(1)
         i = 0
         while((self.readSensorReg(STATUS,1)[0] & 0x01) and i < 5000):
